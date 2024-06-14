@@ -24,6 +24,7 @@ from .vector import vector
 from .pin_layout import pin_layout
 from .utils import round_to_grid
 from . import geometry
+import re
 
 try:
     from tech import special_purposes
@@ -563,7 +564,7 @@ class layout():
         tx_list = []
         for i in self.insts:
             try:
-                if tx_type and tx_type in i.mod.tx_type:
+                if tx_type and re.fullmatch(tx_type, i.mod.tx_type):  # tx_type in i.mod.tx_type:
                     tx_list.append(i)
                 elif not tx_type:
                     if "nmos" in i.mod.tx_type or "pmos" in i.mod.tx_type:
