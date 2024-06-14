@@ -449,6 +449,12 @@ class pin_layout:
                           purposeNumber=label_purpose,
                           magnification=zoom,
                           offsetInMicrons=self.center())
+        if not self.same_lpp((pin_layer_num, pin_purpose), (layer_num, purpose)):
+            newLayout.addText(text=self.name,
+                              layerNumber=pin_layer_num,
+                              purposeNumber=pin_purpose,
+                              magnification=zoom,
+                              offsetInMicrons=self.center())
 
     def compute_overlap(self, other):
         """ Calculate the rectangular overlap of two rectangles. """

@@ -103,14 +103,14 @@ class sram_factory:
             mod = self.modules[real_module_type]
         except KeyError:
             try:
+                # Check if it is a technology specific module
+                c  = importlib.import_module("custom."+real_module_type)
+            except ModuleNotFoundError:
                 # Dynamically load the module
                 if real_module_type == "contact":
                     c  = importlib.import_module("base.contact")
                 else:
                     c  = importlib.import_module("modules."+real_module_type)
-            except ModuleNotFoundError:
-                # Check if it is a technology specific module
-                c  = importlib.import_module("custom."+real_module_type)
 
             mod = getattr(c, real_module_type)
 

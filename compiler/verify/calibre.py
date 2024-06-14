@@ -90,7 +90,6 @@ def write_lvs_script(cell_name, gds_name, sp_name, final_verification=False, out
         'lvsSpiceFile': "{}.spice".format(cell_name),
         'lvsPowerNames': 'vdd',
         'lvsGroundNames': 'gnd',
-        'lvsIncludeSVRFCmds': 1,
         'lvsIgnorePorts': 1,
         'lvsERCDatabase': cell_name + ".erc.results",
         'lvsERCSummaryFile': cell_name + ".erc.summary",
@@ -230,9 +229,9 @@ def write_pex_script(cell_name, extract, output, final_verification=False, outpu
     # write probe file
     # TODO: get from cell name
     f = open(output_path + "probe_file", "w")
-    f.write('CELL cell_1rw\n')
-    f.write('  Q     0.100  0.510  11\n')
-    f.write('  Q_bar  0.520  0.510  11\n')
+    # f.write('CELL cell_1rw\n')
+    # f.write('  Q     0.100  0.510  11\n')
+    # f.write('  Q_bar  0.520  0.510  11\n')
     f.close()
 
     # Create an auxiliary script to run calibre with the runset

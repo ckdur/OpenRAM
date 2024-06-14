@@ -454,6 +454,7 @@ class layout():
         """
         for obj in self.objs:
             obj.offset = vector(obj.offset - offset)
+            obj.compute_boundary(offset=obj.offset)
         for inst in self.insts:
             inst.offset = vector(inst.offset - offset)
             # The instances have a precomputed boundary that we need to update.
@@ -562,10 +563,10 @@ class layout():
         tx_list = []
         for i in self.insts:
             try:
-                if tx_type and i.mod.tx_type == tx_type:
+                if tx_type and tx_type in i.mod.tx_type:
                     tx_list.append(i)
                 elif not tx_type:
-                    if i.mod.tx_type == "nmos" or i.mod.tx_type == "pmos":
+                    if "nmos" in i.mod.tx_type or "pmos" in i.mod.tx_type:
                         tx_list.append(i)
             except AttributeError:
                 pass
