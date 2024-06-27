@@ -408,22 +408,44 @@ class layout():
         """
         # Only consider the layer not the purpose for now
         layerNumber = tech_layer[layer][0]
+        allx = []
+        ally = []
+        highestx = None
+        highesty = None
         try:
-            highestx = max(obj.rx() for obj in self.objs if obj.layerNumber == layerNumber)
+            allx.append(max(obj.rx() for obj in self.objs if obj.layerNumber == layerNumber))
         except ValueError:
-            highestx =0
+            pass
         try:
-            highesty = max(obj.uy() for obj in self.objs if obj.layerNumber == layerNumber)
+            ally.append(max(obj.uy() for obj in self.objs if obj.layerNumber == layerNumber))
         except ValueError:
-            highesty = 0
+            pass
 
         for inst in self.insts:
             # This really should be rotated/mirrored etc...
-            subcoord = inst.mod.find_highest_layer_coords(layer) + inst.offset
-            highestx = max(highestx, subcoord.x)
-            highesty = max(highesty, subcoord.y)
+            subcoord = inst.mod.find_highest_layer_coords(layer)
+            if subcoord is not None:
+                allx.append(subcoord.x + inst.offset.x)
+            if subcoord is not None:
+                ally.append(subcoord.y + inst.offset.y)
 
-        return vector(highestx, highesty)
+        if len(allx) > 0:
+            highestx = max(allx)
+
+        if len(ally) > 0:
+            highesty = max(ally)
+
+        if highestx is not None and highesty is not None:
+            return vector(highestx, highesty)
+        else:
+            return None
+
+    def find_highest_layer_coords_safe(self, layer):
+        ret = self.find_highest_layer_coords(layer)
+        if ret is None:
+            return vector(0, 0)
+        else:
+            return ret
 
     def find_lowest_layer_coords(self, layer):
         """
@@ -432,22 +454,44 @@ class layout():
         """
         # Only consider the layer not the purpose for now
         layerNumber = tech_layer[layer][0]
+        allx = []
+        ally = []
+        lowestx = None
+        lowesty = None
         try:
-            lowestx = min(obj.lx() for obj in self.objs if obj.layerNumber == layerNumber)
+            allx.append(min(obj.lx() for obj in self.objs if obj.layerNumber == layerNumber))
         except ValueError:
-            lowestx = 0
+            pass
         try:
-            lowesty = min(obj.by() for obj in self.objs if obj.layerNumber == layerNumber)
+            ally.append(min(obj.by() for obj in self.objs if obj.layerNumber == layerNumber))
         except ValueError:
-            lowesty = 0
+            pass
 
         for inst in self.insts:
             # This really should be rotated/mirrored etc...
-            subcoord = inst.mod.find_lowest_layer_coords(layer) + inst.offset
-            lowestx = min(lowestx, subcoord.x)
-            lowesty = min(lowesty, subcoord.y)
+            subcoord = inst.mod.find_lowest_layer_coords(layer)
+            if subcoord is not None:
+                allx.append(subcoord.x + inst.offset.x)
+            if subcoord is not None:
+                ally.append(subcoord.y + inst.offset.y)
 
-        return vector(lowestx, lowesty)
+        if len(allx) > 0:
+            lowestx = min(allx)
+
+        if len(ally) > 0:
+            lowesty = min(ally)
+
+        if lowestx is not None and lowesty is not None:
+            return vector(lowestx, lowesty)
+        else:
+            return None
+
+    def find_lowest_layer_coords_safe(self, layer):
+        ret = self.find_lowest_layer_coords(layer)
+        if ret is None:
+            return vector(0, 0)
+        else:
+            return ret
 
     def translate_all(self, offset):
         """
